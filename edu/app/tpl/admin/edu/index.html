@@ -1,0 +1,33 @@
+{include file="../public/admin/meta" title="教育平台CMS"/}
+
+<body>
+    <!-- 顶部开始 -->
+      {include file="../public/admin/header" admin_name="教育平台CMS"/}
+    <!-- 顶部结束 -->
+    <!-- 中部开始 -->
+     <!-- 左侧菜单开始 -->
+      {include file="../public/admin/menu" /}
+    <!-- 左侧菜单结束 -->
+    <!-- 右侧主体开始 -->
+    <div class="page-content">
+        <div class="layui-tab tab" lay-filter="xbs_tab" lay-allowclose="false">
+          <ul class="layui-tab-title">
+            <li class="home"><i class="layui-icon">&#xe68e;</i>管理首页</li>
+          </ul>
+          <div class="layui-tab-content">
+            <div class="layui-tab-item layui-show">
+                <iframe src="{:url('admin/edu/shouye')}" frameborder="0" scrolling="yes" class="x-iframe"></iframe>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="page-content-bg"></div>
+    <!-- 右侧主体结束 -->
+    <!-- 中部结束 -->
+    <!-- 底部开始 -->
+    <div class="footer">
+        <div class="copyright">Copyright ©2018 miniapp All Rights Reserved</div>  
+    </div>
+    <!-- 底部结束 -->
+</body>
+</html>
