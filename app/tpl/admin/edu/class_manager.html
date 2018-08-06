@@ -1,0 +1,95 @@
+ {include file="../public/admin/meta"/}
+    <div class="x-body">      
+  
+      <xblock>
+         <a class="layui-btn layui-btn-small " style1="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新"> <i class="layui-icon" style="line-height:40px">ဂ</i></a>
+      </xblock>
+
+     
+
+      <table class="layui-table layui-form">
+        <thead>
+          <tr>
+            <th width="70">ID</th>
+            <th>栏目名</th>
+            <th width="220">操作</th>
+        </thead>
+        <tbody class="x-cate">
+        	{volist name="data['parent']" id="value"}
+        	
+        	
+          <tr cate-id='{$key+1}' fid='0' >
+            <td>{$key+1}</td>
+            <td>
+              <i class="layui-icon x-show" status='true'>&#xe623;</i> 
+              {$value.name}
+            </td>
+            <td class="td-manage">
+              <button class="layui-btn layui-btn-warm layui-btn-xs"  onclick="x_admin_show('编辑','{:url("class_add",["id"=>$value.id])}')"><i class="layui-icon">&#xe642;</i>添加子栏目</button>
+            </td>
+          </tr>
+          {volist name="data['sub'][$value['id']]" id="item"}
+          <tr cate-id='{$key+2}{$value.id}' fid='{$value['id']}'>
+            <td>{$key+1}</td>
+            <td>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              {$item.name}
+          </td>
+          <td class="td-manage">
+            <button class="layui-btn-danger layui-btn layui-btn-xs" onclick="member_del(this,'{$item.id}','{$value.id}')" href="javascript:;"><i class="layui-icon"></i>删除</button>
+          </td>
+          </tr>
+
+          {/volist}
+          {/volist}
+
+        </tbody>
+      </table>
+    </div>
+    <style type="text/css">
+      
+    </style>
+    <script>
+      layui.use(['form'], function(){
+        form = layui.form;
+        
+      });
+
+      
+
+      /*用户-删除*/
+      function member_del(obj,sub_id,parent_id){
+           
+          layer.confirm('确认要删除吗？',function(index){
+//        	console.log(sub_id);
+          	     $.ajax({
+			                type: "POST",//方法类型
+			                // dataType: "json",//预期服务器返回的数据类型
+			                url: "{:url('admin/edu/class_delete')}" ,//url
+			                data: {"sub_id":sub_id,"parent_id":parent_id},
+			                success: function (res) {
+			                	console.log(res)
+			                	if (res.code == 200) {
+                                         $(obj).parents("tr").remove();
+			                	} 
+		                            layer.msg(res.error_msg);
+			                }
+			            });
+              //发异步删除数据
+              
+          });
+      }
+
+
+
+      function delAll (argument) {
+
+        var data = tableCheck.getData();
+  
+        layer.confirm('确认要删除吗？'+data,function(index){
+            //捉到所有被选中的，发异步进行删除
+            layer.msg('删除成功', {icon: 1});
+            $(".layui-form-checked").not('.header').parents('tr').remove();
+        });
+      }
+    </script>

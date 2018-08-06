@@ -1,0 +1,18 @@
+{include file="../public/admin/meta" title="小程序CMS"/}
+
+<body>
+  
+  <script>
+    var videoId = '564165464'
+    var video_id = 'fgdfsgdf'
+            $.ajax({
+                type: "POST", //方法类型
+                url: "{:url('admin/edu/del_aliyun_video')}", //url
+                data: {'videoId':videoId,'video_id':video_id},
+                success: function(res) {
+                  console.log(res)
+                }
+            })
+  </script>
+</body>
+</html>

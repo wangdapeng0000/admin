@@ -1,0 +1,323 @@
+{include file="../public/admin/meta" title="教育平台CMS"/}
+	 <script type="text/javascript" src="/static/aliyun_video_upload/lib/es6-promise.min.js"></script>
+     <script type="text/javascript" src="/static/aliyun_video_upload/lib/aliyun-oss-sdk4.13.2.min.js"></script>
+     <script type="text/javascript" src="/static/aliyun_video_upload/aliyun-upload-sdk1.3.1.min.js"></script>
+<style>
+    .upload_boay{ 
+        width: 100%;
+    }
+    .course_img{
+        margin:3% 0 0 44%;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+    }
+    .course_title{
+        margin:3% 0 0 40%;
+        background: #009688;
+        color:#fff;
+        width: 20%;
+        overflow: hidden;
+        padding: 5px;
+        text-align: center;
+        border-radius: 5px;
+    }
+    .layui-progress{
+        width: 25%;
+        margin: 3% 0;
+        margin-left: 38%;
+        
+    }
+   
+    .select_file{
+        width: 15%;
+        margin: 3% 0;
+        margin-left: 40%;
+    }
+    .upload_btn{
+        margin: 50px 0;
+        margin-left: 80px;
+    }
+    #files{
+        margin-left: 35px;
+    }
+</style>
+<body>
+         <div class="upload_boay">
+             <img class="course_img" src="{$data['video_img_url']}" alt=""></img>
+             <div class="course_title">{$data['video_name']}</div>
+             <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="demo">
+              <div class="layui-progress-bar" lay-percent="0%"></div>
+            </div>
+             <div class="select_file">
+                <input  type="file" name="file" id="files" multiple/>
+                <button type="button" class="layui-btn upload_btn" onclick="start()">开始上传</button>
+            </div>
+             
+         </div>
+            <input type="text" hidden="true" id="video_id"  value="{$data['video_id']}">
+            <input type="text" hidden="true" id="uploadAuth"  value="{$UploadAuth}">
+            <input type="text" hidden="true" id="uploadAddress" value="{$UploadAddress}">
+            <input type="text" hidden="true" id="videoId" value="{$VideoId}">
+            <input type="text" hidden="true" id="accessKeyId"  value="STS.HeE5L9dob6kGsaF9VdoWygsuP">
+            <input type="text" hidden="true" id="accessKeySecret" value="5xRGiKWyRcwXLkbuoh4u29acStcd1qZ1WqD9dntiAMhF">
+            <input type="text" hidden="true"  id="secretToken"  value="CAISjgJ1q6Ft5B2yfSjIqabwfvaNibBDgamscUf33VYxY9hViLbesjz2IHtKenZsCegav/Q3nW1V7vsdlrBtTJNJSEnDKNF36pkS6g66eIvGvYmz5LkJ0ER9j4dcT0yV5tTbRsmkZu6/E67fUzKpvyt3xqSAO1fGdle5MJqPpId6Z9AMJGeRZiZHA9EkQGkPtsgWZzmzWPG2KUyo+B2yanBloQ1hk2hyxL2iy8mHkHrkgUb91/UeqvaaQPHmTbE1Z88kAofpgrcnJvKfiHYI0XUQqvcq1p4j0Czco9SQD2NW5xi7KOfO+rVtVlQiOPZlR/4c8KmszaQl57SOyJ6U1RFBMexQVD7YQI2wGDdS2XJ/9rwagAE4U2pFoP6wO5FjADB+jhNGY5bWzEUlxZcxU+e38udj2tc3+7X69V9b0fS7NRC7gsNLIrSZFEYgWgF6wM2weVvu5HJl/54c/GT9ItqqnjYE613kGWeJ6a7DqjWxZMKRs5F09mUTNsXFR+no9JTk+K/tdlA/1wuWOIvrAmPOsytzWw==">
+            <input type="text" hidden="true" id="endpoint"  value="">
+            <input type="text" hidden="true" id="bucket"  value="">
+            <input type="text" hidden="true" id="objectPre"  value="">
+<script>
+
+    var accessKeyId = document.getElementById("accessKeyId").value;
+    var accessKeySecret = document.getElementById("accessKeySecret").value;
+    var secretToken = document.getElementById("secretToken").value;
+     
+
+    var uploader = new AliyunUpload.Vod({
+            // 文件上传失败
+            'onUploadFailed': function (uploadInfo, code, message) {
+                
+            },
+            // 文件上传完成
+            'onUploadSucceed': function (uploadInfo) {
+ 
+
+            },
+
+            // 文件上传进度
+            'onUploadProgress': function (uploadInfo, totalSize, loadedPercent) {
+                
+                var progress = (loadedPercent * 100.00).toFixed(0)+"%";
+                    layui.use('element', function(){
+                      var $ = layui.jquery,
+                          element = layui.element;
+                       element.progress('demo', progress)
+                       if (progress == "100%") {
+                        var video_id = $('#video_id').val()
+                         var videoId = $('#videoId').val()
+                           $.ajax({
+                                type: "POST", //方法类型
+                                url: "{:url('admin/edu/teaproduct_video_add')}", //url
+                                data: {'video_id':video_id,'videoId':videoId},
+                                success: function(res) {
+                                  
+                                }
+                            })
+                       } 
+
+                       if (progress == "50%") {
+                        var videoId = $('#videoId').val()
+                            $.ajax({
+                                type: "POST", //方法类型
+                                url: "{:url('admin/edu/del_aliyun_video')}", //url
+                                data: {'videoId':videoId},
+                                success: function(res) {
+                                  
+                                }
+                            })
+                       }
+
+                    })
+            
+            },
+            // STS临时账号会过期，过期时触发函数
+            'onUploadTokenExpired': function (uploadInfo) {
+                
+                if (isVodMode()) {
+                    // 实现时，根据uploadInfo.videoId从新获取UploadAuth
+                    //实际环境中调用点播的刷新上传凭证接口，获取凭证
+                        //https://help.aliyun.com/document_detail/55408.html?spm=a2c4g.11186623.6.630.BoYYcY
+                        //获取上传凭证后，调用setUploadAuthAndAddress
+                    // uploader.resumeUploadWithAuth(uploadAuth);
+                } else if (isSTSMode()) {
+                    // 实现时，从新获取STS临时账号用于恢复上传
+                    // uploader.resumeUploadWithSTSToken(accessKeyId, accessKeySecret, secretToken, expireTime);
+                }
+            },
+            onUploadCanceled:function(uploadInfo)
+            {
+                
+            },
+            // 开始上传
+            'onUploadstarted': function (uploadInfo) {
+                if (isVodMode()) {
+                    if(!uploadInfo.videoId)//这个文件没有上传异常
+                    {
+                        //mock 上传凭证，实际产品中需要通过接口获取
+                        var uploadAuth = document.getElementById("uploadAuth").value;
+                        var uploadAddress = document.getElementById("uploadAddress").value;
+                        var videoId = document.getElementById("videoId").value;
+                        //实际环境中调用调用点播的获取上传凭证接口
+                        //https://help.aliyun.com/document_detail/55407.html?spm=a2c4g.11186623.6.629.CH7i3X
+                        //获取上传凭证后，调用setUploadAuthAndAddress
+                        uploader.setUploadAuthAndAddress(uploadInfo, uploadAuth, uploadAddress,videoId);
+                    }
+                    else//如果videoId有值，根据videoId刷新上传凭证
+                    {
+                        //mock 上传凭证 实际产品中需要通过接口获取
+                        var uploadAuth = document.getElementById("uploadAuth").value;
+                        var uploadAddress = document.getElementById("uploadAddress").value;
+                        //实际环境中调用点播的刷新上传凭证接口，获取凭证
+                        //https://help.aliyun.com/document_detail/55408.html?spm=a2c4g.11186623.6.630.BoYYcY
+                        //获取上传凭证后，调用setUploadAuthAndAddress
+                        uploader.setUploadAuthAndAddress(uploadInfo, uploadAuth, uploadAddress);
+                    }
+                }
+                else if (isSTSMode()) {
+                    var accessKeyId = document.getElementById("accessKeyId").value;
+                    var accessKeySecret = document.getElementById("accessKeySecret").value;
+                    var secretToken = document.getElementById("secretToken").value;
+                    uploader.setSTSToken(uploadInfo, accessKeyId, accessKeySecret,secretToken, "test");
+                }
+                
+            }
+            ,
+            'onUploadEnd':function(uploadInfo){
+                
+            }
+        });
+
+    // 点播上传。每次上传都是独立的鉴权，所以初始化时，不需要设置鉴权
+    // 临时账号过期时，在onUploadTokenExpired事件中，用resumeWithToken更新临时账号，上传会续传。
+    var selectFile = function (event) {
+            var endpoint = document.getElementById("endpoint").value;
+            var bucket = document.getElementById("bucket").value;
+            var objectPre = document.getElementById("objectPre").value;
+            var userData;
+            if (isVodMode()) {
+                userData = '{"Vod":{"UserData":{"IsShowWaterMark":"false","Priority":"7"}}}';
+            } else {
+                userData = '{"Vod":{"Title":"this is title.我是标题","Description":"this is desc.我是描述","CateId":"19","Tags":"tag1,tag2,标签3","UserData":"user data"}}';
+            }
+
+            for(var i=0; i<event.target.files.length; i++) {
+                
+                if (isVodMode()) {
+                    // 点播上传。每次上传都是独立的OSS object，所以添加文件时，不需要设置OSS的属性
+                    uploader.addFile(event.target.files[i], null, null, null, userData);
+                } else if(isSTSMode()) {
+                    // STS的上传方式，需要在userData里指定Title
+                    var object = objectPre;
+             
+                    uploader.addFile(event.target.files[i], endpoint, bucket, object , userData);
+                }
+            }
+        };
+
+    document.getElementById("files")
+        .addEventListener('change', selectFile);
+
+    
+
+    function start() {
+        
+        uploader.startUpload();
+    }
+
+    function stop() {
+        
+        uploader.stopUpload();
+    }
+
+    function resumeWithToken() {
+        
+        var uploadAuth = document.getElementById("uploadAuth").value;
+
+        var accessKeyId = document.getElementById("accessKeyId").value;
+        var accessKeySecret = document.getElementById("accessKeySecret").value;
+        var secretToken = document.getElementById("secretToken").value;
+
+        if (isVodMode()) {
+            uploader.resumeUploadWithAuth(uploadAuth);
+        } else if (isSTSMode()) {
+            uploader.resumeUploadWithSTSToken(accessKeyId, accessKeySecret, secretToken);
+        }
+    }
+
+    function clearInputFile()
+    {
+        var ie = (navigator.appVersion.indexOf("MSIE")!=-1);  
+        if( ie ){  
+            var file = document.getElementById("files");
+            var file2= file.cloneNode(false);  
+            file2.addEventListener('change', selectFile);
+            file.parentNode.replaceChild(file2,file);  
+        }
+        else
+        {
+            document.getElementById("files").value = '';
+        }
+
+    }
+
+    function clearList() {
+        
+        uploader.cleanList();
+    }
+
+    function getList() {
+        
+        var list = uploader.listFiles();
+        for (var i=0; i<list.length; i++) {
+            
+        }
+    }
+
+    function deleteFile() {
+        if (document.getElementById("deleteIndex").value) {
+            var index = document.getElementById("deleteIndex").value
+            
+            uploader.deleteFile(index);
+        }
+    }
+
+    function cancelFile() {
+        if (document.getElementById("cancelIndex").value) {
+            var index = document.getElementById("cancelIndex").value
+            
+            uploader.cancelFile(index);
+        }
+    }
+
+    function resumeFile() {
+        if (document.getElementById("resumeIndex").value) {
+            var index = document.getElementById("resumeIndex").value
+            
+            uploader.resumeFile(index);
+        }
+    }
+
+    function clearLog() {
+        // textarea.options.length = 0;
+    }
+
+
+
+    function isVodMode() {
+        var uploadAuth = document.getElementById("uploadAuth").value;
+        return (uploadAuth && uploadAuth.length > 0);
+    }
+
+    function isSTSMode() {
+        var secretToken = document.getElementById("secretToken").value;
+        if (!isVodMode()) {
+            if (secretToken && secretToken.length > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+</script>
+
+</body>
+</html>
+
+
+	
+
+
+	
+
+	
+
+	

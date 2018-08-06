@@ -1,0 +1,131 @@
+{include file="../public/admin/meta"/}
+<style>
+	textarea{ resize:none;
+	}
+</style>
+<form class="layui-form" style="margin-left: 30%;margin-top: 3%;">
+		<input type="text" name="id" value="{$data['teacher']['id']}" hidden="true">
+	<div class="layui-form-item">
+		<div class="layui-inline">
+			<label class="layui-form-label">老师名字</label>
+			<div class="layui-input-inline">
+				<input type="text" name="name" lay-verify="required" autocomplete="off" class="layui-input" value="{$data['teacher']['name']}"/>
+			</div>
+		</div>
+		
+		
+		
+	</div>
+	
+	
+<div class="layui-form-item">
+		
+	<div class="layui-inline">
+		<label class="layui-form-label">老师头像</label>
+		<div class="layui-input-inline">
+			<div class="layui-upload">
+				
+				<div class="layui-upload-list">
+					<img class="layui-upload-img" id="show_img" style="width: 100px;height: 100px;" name="head_img" src="{$data['teacher']['head_img']}"/>
+					<input name="head_img" id="add_img" value="{$data['teacher']['head_img']}" hidden="true"/>
+					<p id="demoText"></p>
+				</div>
+				<button type="button" class="layui-btn" id="insert_img">上传图片</button>
+			</div>
+		</div>
+	</div>
+	
+	<div class="layui-inline">
+			<label class="layui-form-label">教师简介</label>
+		    <div class="layui-input-block">
+                <textarea placeholder="请输入内容" class="layui-textarea" name="info" style="resize:none;">{$data['teacher']['info']}</textarea>
+            </div>
+       </div>	
+	
+	</div>
+	
+
+
+	</div>
+
+	
+
+	<div class="layui-form-item">
+		<div class="layui-input-block">
+			<button class="layui-btn" lay-submit="" lay-filter="from">立即提交</button>
+			<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+		</div>
+	</div>
+</form>
+<script>
+	layui.use(['form', 'layedit', 'laydate', 'upload'], function() {
+
+		var $ = layui.jquery,
+			upload = layui.upload;
+
+		//普通图片上传
+		var uploadInst = upload.render({
+			elem: '#insert_img',
+			url: '{:url("admin/edu/insert_img")}',
+			before: function(obj) {
+				//预读本地文件示例，不支持ie8
+				obj.preview(function(index, file, result) {
+					$('#show_img').attr('src', result); //图片链接（base64）
+				});
+			},
+			done: function(res) {
+				$('#add_img').val(res);
+              console.log(res);
+				return layer.msg('上传成功');
+				
+
+			},
+			error: function() {
+				//演示失败状态，并实现重传
+				var demoText = $('#demoText');
+				demoText.html('<span style="color: #FF5722;">上传失败</span> <a class="layui-btn layui-btn-mini demo-reload">重试</a>');
+				demoText.find('.demo-reload').on('click', function() {
+					uploadInst.upload();
+				});
+			}
+		});
+
+		var form = layui.form,
+			layer = layui.layer,
+			layedit = layui.layedit,
+			laydate = layui.laydate;
+
+		//自定义验证规则
+		form.verify({
+			title: function(value) {
+					if(value.length < 2) {
+						return '至少得2个字符啊';
+					}
+				}
+
+				,
+			content: function(value) {
+				layedit.sync(editIndex);
+			}
+		});
+
+		//监听提交
+		form.on('submit(from)', function(data) {
+			console.log("from");
+			$.ajax({
+				type: "POST", //方法类型
+				// dataType: "json",//预期服务器返回的数据类型
+				url: "{:url('admin/edu/member_update')}", //url
+				data: data.field,
+				success: function(res) {
+					console.log(res)
+
+					layer.msg(res, function() {});
+
+				}
+			});
+			return false;
+		});
+
+	});
+</script>

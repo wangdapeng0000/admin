@@ -1,0 +1,183 @@
+    <div class="left-nav">
+      <div id="side-nav">
+        <ul id="nav">
+        	{if ($is_admin == 0)} 
+        	<li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe726;</i>
+                    <cite>课程管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                	<li>
+                        <a _href="{:url('teaproduct_list')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>课程列表</cite>
+                        </a>
+                    </li >
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe723;</i>
+                    <cite>订单管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="{:url('order_list')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>订单列表</cite>
+                        </a>
+                    </li >
+                </ul>
+            </li>
+            {else /}
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe726;</i>
+                    <cite>课程管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="{:url('product_list')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>课程信息列表</cite>
+                        </a>
+                    </li >
+                    <li>
+                        <a _href="{:url('product_recommend')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>推荐课程列表</cite>
+                        </a>
+                    </li >
+                    
+                   
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe6b8;</i>
+                    <cite>教师管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="{:url('member_list')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>教师列表</cite>
+                            
+                        </a>
+                    </li >
+                    <li>
+                        <a _href="{:url('teacher_recommend')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>推荐老师列表</cite>
+                        </a>
+                    </li >
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe723;</i>
+                    <cite>订单管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="{:url('order_list')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>订单列表</cite>
+                        </a>
+                    </li >
+                </ul>
+            </li>
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe723;</i>
+                    <cite>分类管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="{:url('class_manager')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>多级分类</cite>
+                        </a>
+                    </li >
+                </ul>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="{:url('class_menu')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>菜单管理</cite>
+                        </a>
+                    </li >
+                </ul>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="{:url('img')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>公共图片管理</cite>
+                        </a>
+                    </li >
+                </ul>
+            </li>
+
+          
+            <li>
+             <li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe723;</i>
+                    <cite>财务管理</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="{:url('buy_list')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>老师财务管理</cite>
+                        </a>
+                    </li >
+                    <li>
+                        <a _href="{:url('audit')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>老师提现管理</cite>
+                        </a>
+                    </li >
+                </ul>
+            </li>
+          
+            <li>
+                <a href="javascript:;">
+                    <i class="iconfont">&#xe6ce;</i>
+                    <cite>系统统计</cite>
+                    <i class="iconfont nav_right">&#xe697;</i>
+                </a>
+                <ul class="sub-menu">
+                    <li>
+                        <a _href="{:url('user_list')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>用户统计</cite>
+                        </a>
+                    </li >
+                    <li>
+                        <a _href="{:url('teacher_carry_statistics')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>提现记录</cite>
+                        </a>
+                    </li >
+                </ul>
+            </li>
+            {/if}
+        	
+        	
+        	
+        	
+        	
+            
+           
+        </ul>
+      </div>
+    </div>

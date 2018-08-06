@@ -1,0 +1,16 @@
+{include file="../public/admin/meta" title="教育平台CMS"/}
+<body>
+	
+	<script>
+		var videoId = $('#videoId').val()
+            $.ajax({
+                type: "POST", //方法类型
+                url: "{:url('admin/edu/teaproduct_video_add')}", //url
+                data: {'videoId':videoId},
+                success: function(res) {
+                  
+                }
+            })
+	</script>
+</body>
+</html>

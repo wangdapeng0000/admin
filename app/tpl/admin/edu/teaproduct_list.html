@@ -1,0 +1,172 @@
+{include file="../public/admin/meta"/}
+
+<style type="text/css">
+	.pagination {
+		display: inline-flex;
+		width: 100%;
+		justify-content: center;
+		font-size: 15px;
+	}
+	
+	.pagination li {
+		display: inline-flex;
+		border: 1px #CCCCCC solid;
+		width: 35px;
+		height: 35px;
+		justify-content: center;
+		align-items: center;
+		margin-left: 5px;
+		border-radius: 5px;
+	}
+	td{
+		text-align:center;
+	}
+	tr>th{
+		text-align: center;
+	}
+</style>
+<div class="x-body">
+	<xblock>
+		<button class="layui-btn" onclick="x_admin_show('添加','{:url("teaproduct_add")}')"><i class="layui-icon"></i>添加视频信息</button>
+		<a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+			<i class="layui-icon" style="line-height:40px">ဂ</i></a>
+	</xblock>
+	<table class="layui-table">
+		<thead>
+			<tr>
+				<th>课程名称</th>
+				<th>课程封面</th>
+				<th>课节</th>
+				<th>课件</th>
+				<th>上课时间</th>
+				<th>操作</th>
+		</thead>
+		<tbody>
+			<tr>
+				<td>{$data['product']['name']}</td>
+				<td><img src="{$data['product']['img_url']}" style="width: 80px;height: 60px;" /></td>
+				<td>{$data['product']['course_num']}</td>
+				<td>{$data['product']['courseware_num']}</td>
+				<td>{$data['product']['course_info']}</td>
+				<td class="td-manage">
+					<button title="课程信息编辑" onclick='x_admin_show("编辑","{:url('product_edit',['id'=>$data['product']['id']])}")' href="javascript:;" class="layui-btn layui-btn-normal "><i class="layui-icon" onclick="">&#xe642;</i>修改</button>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<!--视频列表-->
+	<table class="layui-table">
+		<thead>
+			<tr>
+				<th>序号</th>
+				<th>视频名称</th>
+				<th>课件</th>
+				<th>浏览量</th>
+				<th>视频封面</th>
+				<th >上传操作</th>
+				<th >修改操作</th>
+		</thead>
+		<tbody>
+			{volist name="$data['video']" id="value"}
+			<tr>
+
+				<td>{$key+1}</td>
+				<td>{$value.video_name}</td>
+				<td>{$value.courseware_num}</td>
+				<td>{$value.browse_num}</td>
+				<td><img src="{$value.video_img_url}" style="width: 80px;height: 60px;" /></td>
+				
+			
+				<td>
+					
+					<button type="button" class="layui-btn" style="margin-left: 0;" onclick='x_admin_show("编辑","{:url('teaproduct_video',['id'=>$value.id])}")' href="javascript:;">上传视频</button>
+					
+				</td>
+
+				<td>
+ 
+					<button title="课程信息编辑"  onclick='x_admin_show("编辑","{:url('teaproduct_edit',['id'=>$value.id])}")' href="javascript:;" class="layui-btn layui-btn-normal "><i class="layui-icon" onclick="">&#xe642;</i>修改</button>
+                    <button class="layui-btn layui-btn-danger" onclick="member_del(this,'{$value.id}')" href="javascript:;"><i class="layui-icon">&#xe640;</i>删除</button>
+					
+				</td>
+			</tr>
+			{/volist}
+		</tbody>
+		{$page|raw}
+	</table>
+</div>
+<input hidden="true" type="text" id="accessKeyId" size="20" value="STS.HeE5L9dob6kGsaF9VdoWygsuP">
+<input hidden="true" type="text" id="accessKeySecret" size="40" value="5xRGiKWyRcwXLkbuoh4u29acStcd1qZ1WqD9dntiAMhF">
+<input hidden="true" type="text" id="secretToken" size="40" value="CAISjgJ1q6Ft5B2yfSjIqabwfvaNibBDgamscUf33VYxY9hViLbesjz2IHtKenZsCegav/Q3nW1V7vsdlrBtTJNJSEnDKNF36pkS6g66eIvGvYmz5LkJ0ER9j4dcT0yV5tTbRsmkZu6/E67fUzKpvyt3xqSAO1fGdle5MJqPpId6Z9AMJGeRZiZHA9EkQGkPtsgWZzmzWPG2KUyo+B2yanBloQ1hk2hyxL2iy8mHkHrkgUb91/UeqvaaQPHmTbE1Z88kAofpgrcnJvKfiHYI0XUQqvcq1p4j0Czco9SQD2NW5xi7KOfO+rVtVlQiOPZlR/4c8KmszaQl57SOyJ6U1RFBMexQVD7YQI2wGDdS2XJ/9rwagAE4U2pFoP6wO5FjADB+jhNGY5bWzEUlxZcxU+e38udj2tc3+7X69V9b0fS7NRC7gsNLIrSZFEYgWgF6wM2weVvu5HJl/54c/GT9ItqqnjYE613kGWeJ6a7DqjWxZMKRs5F09mUTNsXFR+no9JTk+K/tdlA/1wuWOIvrAmPOsytzWw==">
+
+<script>
+	layui.use(['laydate', 'upload', 'element'], function() {
+
+		var $ = layui.jquery,
+			upload = layui.upload;
+
+		var $ = layui.jquery,
+			element = layui.element;
+
+		var laydate = layui.laydate;    
+
+	});
+
+
+
+	
+
+	/*用户-删除*/
+	function member_del(obj, id) {
+
+		layer.confirm('确认要删除吗？', function(index) {
+			console.log(id);
+			$.ajax({
+				type: "POST", //方法类型
+				// dataType: "json",//预期服务器返回的数据类型
+				url: "{:url('admin/edu/teaproduct_delete')}", //url
+				data: {
+					'id': id
+				},
+				success: function(res) {
+					console.log(res)
+					if(res.code == 200) {
+						$(obj).parents("tr").remove();
+					}
+					layer.msg(res.error_msg);
+				}
+			});
+			//发异步删除数据
+
+		});
+	}
+
+	//    修改
+
+	function delAll(argument) {
+
+		var data = tableCheck.getData();
+		console.log(data);
+		layer.confirm('确认要删除吗？' + data, function(index) {
+			$.ajax({
+				type: "POST", //方法类型
+				// dataType: "json",//预期服务器返回的数据类型
+				url: "{:url('admin/edu/teaproduct_delete')}", //url
+				data: {
+					'id': data
+				},
+				success: function(res) {
+					console.log(res)
+					if(res.code == 200) {
+						$(".layui-form-checked").not('.header').parents('tr').remove();
+						layer.msg(res.error_msg);
+					}
+					layer.msg(res.error_msg);
+				}
+			});
+
+		});
+	}
+
+
+</script>
